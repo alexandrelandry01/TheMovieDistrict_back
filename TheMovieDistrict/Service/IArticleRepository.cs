@@ -7,5 +7,7 @@ namespace TheMovieDistrict.Service
     {
         Article? AddArticle([FromBody] Article article);
         IEnumerable<Article> GetArticles();
+        Article? GetArticleById(int id);
+        Article? UpdateArticle([FromBody] Article article);
     }
 }

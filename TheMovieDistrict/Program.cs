@@ -26,9 +26,9 @@ namespace TheMovieDistrict
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.AllowAnyOrigin()//WithOrigins("https://localhost:8080/")
+                        builder.AllowAnyOrigin()
                         .AllowAnyHeader()
-                        .AllowAnyOrigin();
+                        .WithMethods("GET", "POST", "PUT", "DELETE");
                     });
             });
 

@@ -19,16 +19,31 @@ namespace TheMovieDistrict.Service.impl
             _context.Articles.Add(Article);
             var success = _context.SaveChanges() > 0;
 
-            if (success)
-            {
-                return Article;
-            }
-            return null;
+            return success ? Article : null;
         }
 
         public IEnumerable<Article> GetArticles()
         {
             return _context.Articles.ToList();
+        }
+
+        public Article? GetArticleById(int id)
+        {
+            return _context.Articles.Where(m => m.Id == id).FirstOrDefault();
+        }
+
+        public Article? UpdateArticle([FromBody] Article Article)
+        {
+            var article = _context.Articles.Find(Article.Id);
+
+            if (article != null)
+            {
+                _context.Entry(article).CurrentValues.SetValues(Article);
+            }
+
+            bool success = _context.SaveChanges() > 0;
+
+            return success ? article : null;
         }
     }
 }

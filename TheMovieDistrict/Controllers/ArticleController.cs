@@ -29,13 +29,34 @@ namespace TheMovieDistrict.Controllers
             return Ok(articles);
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<ArticleDto> GetArticleById(int id)
+        {
+            var article = _articleRepository.GetArticleById(id);
+
+            if (article == null)
+            {
+                return NotFound();
+            }
+            return Ok(article);
+        }
+
         [HttpPost("addarticle")]
         [ProducesResponseType(typeof(Article), 200)]
         [ProducesResponseType(404)]
-        public Article? AddArticle([FromBody] Article Article)
+        public ActionResult<ArticleDto> AddArticle([FromBody] Article Article)
         {
             Article.DateTime = DateTime.Now;
-            return _articleRepository.AddArticle(Article);
+
+            return Ok(_articleRepository.AddArticle(Article));
+        }
+
+        [HttpPut("updatearticle/{id}")]
+        public ActionResult<ArticleDto> UpdateArticle([FromBody] Article Article)
+        {
+            var updatedArticle = _articleRepository.UpdateArticle(Article);
+
+            return Ok(updatedArticle);
         }
     }
 }
