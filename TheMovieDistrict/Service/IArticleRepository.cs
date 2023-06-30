@@ -9,5 +9,6 @@ namespace TheMovieDistrict.Service
         IEnumerable<Article> GetArticles();
         Article? GetArticleById(int id);
         Article? UpdateArticle([FromBody] Article article);
+        bool DeleteArticle(int id);
     }
 }

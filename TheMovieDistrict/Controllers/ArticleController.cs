@@ -58,5 +58,16 @@ namespace TheMovieDistrict.Controllers
 
             return Ok(updatedArticle);
         }
+
+        [HttpDelete("deletearticle/{id}")]
+        public ActionResult DeleteArticle(int id) {
+            bool articleDeleted = _articleRepository.DeleteArticle(id);
+
+            if (articleDeleted)
+            {
+                return Ok(articleDeleted);
+            }
+            return BadRequest("Article was not found");
+        }
     }
 }

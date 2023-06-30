@@ -24,7 +24,9 @@ namespace TheMovieDistrict.Service.impl
 
         public IEnumerable<Article> GetArticles()
         {
-            return _context.Articles.ToList();
+            return _context.Articles
+                .OrderByDescending(a => a.DateTime)
+                .ToList();
         }
 
         public Article? GetArticleById(int id)
@@ -44,6 +46,19 @@ namespace TheMovieDistrict.Service.impl
             bool success = _context.SaveChanges() > 0;
 
             return success ? article : null;
+        }
+
+        public bool DeleteArticle(int id)
+        {
+            var article = _context.Articles.Find(id);
+
+            if (article == null)
+            {
+                return false;
+            }
+            _context.Articles.Remove(article);
+            
+            return _context.SaveChanges() > 0;
         }
     }
 }
