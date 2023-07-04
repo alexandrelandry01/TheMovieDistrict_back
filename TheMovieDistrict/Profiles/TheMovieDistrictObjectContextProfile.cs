@@ -8,6 +8,7 @@ namespace TheMovieDistrict.Profiles
         {
             CreateMap<Entities.Article, Models.ArticleDto>();
             CreateMap<Entities.Movie, Models.MovieDto>();
+            CreateMap<Entities.Country, Models.CountryDto>();
         }
     }
 }

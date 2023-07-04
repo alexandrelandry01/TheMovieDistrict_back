@@ -20,6 +20,7 @@ namespace TheMovieDistrict
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("server=LAPTOP-VRS9FVBJ\\MSSQLSERVER01;database=the_movie_district;trusted_connection=true;"));
             builder.Services.AddScoped<IMovieRepository, MovieRepository>();
             builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+            builder.Services.AddScoped<ICountryRepository, CountryRepository>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddCors(options =>
             {

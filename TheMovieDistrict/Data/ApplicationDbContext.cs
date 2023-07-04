@@ -14,6 +14,7 @@ namespace TheMovieDistrict.Data
         public DbSet<Movie> Movies { get; set; } = null!;
         public DbSet<Location> Locations { get; set; } = null!;
         public DbSet<Article> Articles { get; set; } = null!;
+        public DbSet<Country> Countries { get; set; } = null!;
 
     }
 }

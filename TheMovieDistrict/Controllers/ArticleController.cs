@@ -26,6 +26,10 @@ namespace TheMovieDistrict.Controllers
         {
             var articles = _articleRepository.GetArticles();
 
+            if (articles == null)
+            {
+                return NotFound();
+            }
             return Ok(articles);
         }
 

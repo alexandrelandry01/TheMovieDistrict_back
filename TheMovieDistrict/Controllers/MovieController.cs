@@ -1,7 +1,4 @@
-﻿using TheMovieDistrict.Data;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using TheMovieDistrict.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using TheMovieDistrict.Service;
 using AutoMapper;
 using TheMovieDistrict.Models;

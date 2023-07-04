@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TheMovieDistrict.Data;
+﻿using TheMovieDistrict.Data;
 using TheMovieDistrict.Entities;
 
 namespace TheMovieDistrict.Service.impl

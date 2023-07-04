@@ -1,6 +1,4 @@
-﻿using TheMovieDistrict.Util;
-
-namespace TheMovieDistrict.Entities
+﻿namespace TheMovieDistrict.Entities
 {
     public class Location
     {

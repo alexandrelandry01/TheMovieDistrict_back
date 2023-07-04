@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using TheMovieDistrict.Util;
 
 namespace TheMovieDistrict.Entities
 {
@@ -11,6 +10,7 @@ namespace TheMovieDistrict.Entities
         public string? StreetName { get; set; }
         public string? Coordinates { get; set; }
         public string City { get; set; } = null!;
-        public Country Country { get; set; }
+        public string Territory  { get; set; } = null!;
+        public Country Country { get; set; } = null!;
     }
 }
