@@ -1,6 +1,8 @@
-﻿namespace TheMovieDistrict.Entities
+﻿using TheMovieDistrict.Entities;
+
+namespace TheMovieDistrict.Models
 {
-    public class Location
+    public class LocationDto
     {
         public int Id { get; set; }
         public string? Description { get; set; } = null!;

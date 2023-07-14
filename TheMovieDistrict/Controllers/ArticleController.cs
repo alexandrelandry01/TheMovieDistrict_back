@@ -21,6 +21,14 @@ namespace TheMovieDistrict.Controllers
                 throw new ArgumentNullException(nameof(mapper));
         }
 
+        [HttpPost("addarticle")]
+        public ActionResult<ArticleDto> AddArticle([FromBody] Article Article)
+        {
+            Article.DateTime = DateTime.Now;
+
+            return Ok(_articleRepository.AddArticle(Article));
+        }
+
         [HttpGet]
         public ActionResult<IEnumerable<ArticleDto>> GetArticles()
         {
@@ -43,16 +51,6 @@ namespace TheMovieDistrict.Controllers
                 return NotFound();
             }
             return Ok(article);
-        }
-
-        [HttpPost("addarticle")]
-        [ProducesResponseType(typeof(Article), 200)]
-        [ProducesResponseType(404)]
-        public ActionResult<ArticleDto> AddArticle([FromBody] Article Article)
-        {
-            Article.DateTime = DateTime.Now;
-
-            return Ok(_articleRepository.AddArticle(Article));
         }
 
         [HttpPut("updatearticle/{id}")]

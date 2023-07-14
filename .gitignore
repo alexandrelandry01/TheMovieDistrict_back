@@ -231,6 +231,7 @@ _pkginfo.txt
 
 # Others
 ClientBin/
+Data/
 ~$*
 *~
 *.dbmdl
@@ -361,3 +362,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/TheMovieDistrict/Data/Migrations/ApplicationDbContextModelSnapshot.cs

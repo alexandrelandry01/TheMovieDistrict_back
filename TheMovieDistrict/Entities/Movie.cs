@@ -9,8 +9,7 @@ namespace TheMovieDistrict.Entities
         public string Title { get; set; } = null!;
         public int YearOfRelease { get; set; }
         public string Director { get; set; } = null!;
-        public ICollection<Location> locations { get; set; } = new List<Location>();
-        [DefaultValue("false")]
+        public ICollection<Location> Locations { get; set; } = new List<Location>();
         public bool IsPublished { get; set; }
         public DateTime CreationDate { get; set; }
     }
