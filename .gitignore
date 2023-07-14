@@ -363,3 +363,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /TheMovieDistrict/Data/Migrations/ApplicationDbContextModelSnapshot.cs
+
+# Main configuration
+Program.cs
