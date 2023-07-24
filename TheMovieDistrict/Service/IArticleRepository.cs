@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TheMovieDistrict.Entities;
+﻿using TheMovieDistrict.Models;
 
 namespace TheMovieDistrict.Service
 {
     public interface IArticleRepository
     {
-        Article? AddArticle([FromBody] Article article);
-        IEnumerable<Article> GetArticles();
-        Article? GetArticleById(int id);
-        Article? UpdateArticle([FromBody] Article article);
-        bool DeleteArticle(int id);
+        ArticleDto? AddArticle(ArticleDto ArticleDto);
+        IEnumerable<ArticleDto>? GetArticles();
+        ArticleDto? GetArticleById(int Id);
+        ArticleDto? UpdateArticle(ArticleDto ArticleDto);
+        bool DeleteArticle(int Id);
     }
 }

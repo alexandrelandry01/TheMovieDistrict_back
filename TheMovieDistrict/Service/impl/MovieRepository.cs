@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TheMovieDistrict.Data;
 using TheMovieDistrict.Entities;
+using TheMovieDistrict.Models;
 
 namespace TheMovieDistrict.Service.impl
 {
@@ -13,24 +14,18 @@ namespace TheMovieDistrict.Service.impl
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public Movie? AddMovie(Movie Movie)
+        public MovieDto? AddMovie(MovieDto MovieDto)
         {
+            Movie Movie = Movie.FromMovieDto(MovieDto);
+
             if (!MovieAlreadyExists(Movie))
             {
                 _context.Movies.Add(Movie);
                 var success = _context.SaveChanges() > 0;
 
-                return success ? Movie : null;
+                return success ? MovieDto.FromMovie(Movie) : null;
             }
             return null;
-        }
-
-        public Movie? UpdateLocations(Movie Movie)
-        {
-            _context.Movies.Update(Movie);
-            var success = _context.SaveChanges() > 0;
-
-            return success ? Movie : null;
         }
 
         public IEnumerable<Movie> GetMovies()
@@ -38,9 +33,20 @@ namespace TheMovieDistrict.Service.impl
             return _context.Movies.Include(m => m.Locations).ToList();
         }
 
-        public Movie? GetMovieById(int id)
+        public MovieDto? GetMovieById(int Id)
         {
-            return _context.Movies.Where(m => m.Id == id).FirstOrDefault();
+            var movie = _context.Movies.Where(m => m.Id == Id)
+                                  .Include(m => m.Locations)
+                                  .ThenInclude(l => l.Address)
+                                  .ThenInclude(c => c.Country)
+                                  .FirstOrDefault();
+
+            if (movie == null)
+            {
+                return null;
+            }
+
+            return MovieDto.FromMovie(movie);
         }
 
         public bool MovieAlreadyExists(Movie Movie)

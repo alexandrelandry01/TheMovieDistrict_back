@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TheMovieDistrict.Entities;
 using TheMovieDistrict.Models;
 using TheMovieDistrict.Service;
 
@@ -22,11 +21,11 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpPost("addarticle")]
-        public ActionResult<ArticleDto> AddArticle([FromBody] Article Article)
+        public ActionResult<ArticleDto> AddArticle([FromBody] ArticleDto ArticleDto)
         {
-            Article.DateTime = DateTime.Now;
+            ArticleDto.DateTime = DateTime.Now;
 
-            return Ok(_articleRepository.AddArticle(Article));
+            return Ok(_articleRepository.AddArticle(ArticleDto));
         }
 
         [HttpGet]
@@ -42,9 +41,9 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ArticleDto> GetArticleById(int id)
+        public ActionResult<ArticleDto> GetArticleById(int Id)
         {
-            var article = _articleRepository.GetArticleById(id);
+            var article = _articleRepository.GetArticleById(Id);
 
             if (article == null)
             {
@@ -54,16 +53,14 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpPut("updatearticle/{id}")]
-        public ActionResult<ArticleDto> UpdateArticle([FromBody] Article Article)
+        public ActionResult<ArticleDto> UpdateArticle([FromBody] ArticleDto ArticleDto)
         {
-            var updatedArticle = _articleRepository.UpdateArticle(Article);
-
-            return Ok(updatedArticle);
+            return Ok(_articleRepository.UpdateArticle(ArticleDto));
         }
 
         [HttpDelete("deletearticle/{id}")]
-        public ActionResult DeleteArticle(int id) {
-            bool articleDeleted = _articleRepository.DeleteArticle(id);
+        public ActionResult DeleteArticle(int Id) {
+            bool articleDeleted = _articleRepository.DeleteArticle(Id);
 
             if (articleDeleted)
             {

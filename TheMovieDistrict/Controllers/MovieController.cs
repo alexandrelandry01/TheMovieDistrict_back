@@ -2,7 +2,6 @@
 using TheMovieDistrict.Service;
 using AutoMapper;
 using TheMovieDistrict.Models;
-using TheMovieDistrict.Entities;
 
 namespace TheMovieDistrict.Controllers
 {
@@ -22,25 +21,11 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpPost("addmovie")]
-        public ActionResult<MovieDto> AddMovie([FromBody] Movie Movie)
+        public ActionResult<MovieDto> AddMovie([FromBody] MovieDto MovieDto)
         {
-            Movie.CreationDate = DateTime.Now;
+            MovieDto.CreationDate = DateTime.Now;
 
-            return Ok(_movieRepository.AddMovie(Movie));
-        }
-
-        [HttpPut("updatelocations/{id}")]
-        public ActionResult<MovieDto> UpdateLocations(int id, [FromBody] ICollection<Location> Locations)
-        {
-            var movie = _movieRepository.GetMovieById(id);
-
-            if (movie == null)
-            {
-                return NotFound();
-            }
-            movie.Locations = Locations;
-
-            return Ok(_movieRepository.UpdateLocations(movie));
+            return Ok(_movieRepository.AddMovie(MovieDto));
         }
 
         [HttpGet]
@@ -57,9 +42,9 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<MovieDto> GetMovieById(int id)
+        public ActionResult<MovieDto> GetMovieById(int Id)
         {
-            var movie = _movieRepository.GetMovieById(id);
+            var movie = _movieRepository.GetMovieById(Id);
             
             if (movie == null)
             {

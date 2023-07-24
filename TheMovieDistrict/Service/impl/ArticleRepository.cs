@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TheMovieDistrict.Data;
 using TheMovieDistrict.Entities;
+using TheMovieDistrict.Models;
 
 namespace TheMovieDistrict.Service.impl
 {
@@ -13,43 +14,61 @@ namespace TheMovieDistrict.Service.impl
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public Article? AddArticle([FromBody] Article Article)
+        public ArticleDto? AddArticle(ArticleDto ArticleDto)            
         {
-            _context.Articles.Add(Article);
+            _context.Articles.Add(Article.FromArticleDto(ArticleDto));
             var success = _context.SaveChanges() > 0;
 
-            return success ? Article : null;
+            return success ? ArticleDto : null;
         }
 
-        public IEnumerable<Article> GetArticles()
+        public IEnumerable<ArticleDto>? GetArticles()
         {
-            return _context.Articles
+            IEnumerable<Article> result = _context.Articles
                 .OrderByDescending(a => a.DateTime)
                 .ToList();
+
+            if (result.Any())
+            {
+                ICollection<ArticleDto> resultMapped = new List<ArticleDto>();
+                foreach (Article articleFound in result.ToList())
+                {
+                    resultMapped.Add(ArticleDto.FromArticle(articleFound));
+                }
+                return resultMapped;
+            }
+            return null;
         }
 
-        public Article? GetArticleById(int id)
+        public ArticleDto? GetArticleById(int Id)
         {
-            return _context.Articles.Where(m => m.Id == id).FirstOrDefault();
+            var article = _context.Articles.Where(m => m.Id == Id).FirstOrDefault();
+
+            if (article == null)
+            {
+                return null;
+            } 
+
+            return ArticleDto.FromArticle(article);
         }
 
-        public Article? UpdateArticle([FromBody] Article Article)
+        public ArticleDto? UpdateArticle(ArticleDto ArticleDto)
         {
-            var article = _context.Articles.Find(Article.Id);
+            var article = _context.Articles.Find(ArticleDto.Id);
 
             if (article != null)
             {
-                _context.Entry(article).CurrentValues.SetValues(Article);
+                _context.Entry(article).CurrentValues.SetValues(ArticleDto);
             }
 
             bool success = _context.SaveChanges() > 0;
 
-            return success ? article : null;
+            return success ? ArticleDto : null;
         }
 
-        public bool DeleteArticle(int id)
+        public bool DeleteArticle(int Id)
         {
-            var article = _context.Articles.Find(id);
+            var article = _context.Articles.Find(Id);
 
             if (article == null)
             {
