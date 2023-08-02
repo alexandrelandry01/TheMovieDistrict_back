@@ -53,5 +53,11 @@ namespace TheMovieDistrict.Controllers
 
             return Ok(movie);
         }
+
+        [HttpPut("updatemovie/{id}")]
+        public ActionResult<MovieDto> UpdateMovie([FromBody] MovieDto MovieDto)
+        {
+            return Ok(_movieRepository.UpdateMovie(MovieDto));
+        } 
     }
 }

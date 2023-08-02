@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace TheMovieDistrict.Entities
+﻿namespace TheMovieDistrict.Entities
 {
     public class Address
     {

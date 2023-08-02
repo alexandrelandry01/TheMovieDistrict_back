@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TheMovieDistrict.Data;
 using TheMovieDistrict.Entities;
 using TheMovieDistrict.Models;
@@ -38,7 +39,6 @@ namespace TheMovieDistrict.Service.impl
             var movie = _context.Movies.Where(m => m.Id == Id)
                                   .Include(m => m.Locations)
                                   .ThenInclude(l => l.Address)
-                                  .ThenInclude(c => c.Country)
                                   .FirstOrDefault();
 
             if (movie == null)
@@ -47,6 +47,20 @@ namespace TheMovieDistrict.Service.impl
             }
 
             return MovieDto.FromMovie(movie);
+        }
+
+        public MovieDto? UpdateMovie([FromBody] MovieDto MovieDto)
+        {
+            var movie = _context.Movies.Find(MovieDto.Id);
+
+            if (movie != null)
+            {
+                _context.Entry(movie).CurrentValues.SetValues(MovieDto);
+            }
+
+            bool success = _context.SaveChanges() > 0;
+
+            return success ? MovieDto : null;
         }
 
         public bool MovieAlreadyExists(Movie Movie)

@@ -15,7 +15,7 @@ namespace TheMovieDistrict.Controllers
                 throw new ArgumentNullException(nameof(locationRepository));
         }
 
-        [HttpPost("updatelocations/{id}")]
+        [HttpPut("updatelocations/{id}")]
         public ActionResult<IEnumerable<LocationDto>> UpdateLocations(int Id, [FromBody] ICollection<LocationDto> Locations)
         {
             var locations = _locationRepository.UpdateLocations(Id, Locations);

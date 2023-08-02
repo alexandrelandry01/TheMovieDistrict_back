@@ -9,6 +9,7 @@ namespace TheMovieDistrict.Service
         MovieDto? AddMovie([FromBody] MovieDto MovieDto);
         IEnumerable<Movie> GetMovies();
         MovieDto? GetMovieById(int Id);
+        MovieDto? UpdateMovie([FromBody] MovieDto MovieDto);
         bool MovieAlreadyExists(Movie Movie);
     }
 }
