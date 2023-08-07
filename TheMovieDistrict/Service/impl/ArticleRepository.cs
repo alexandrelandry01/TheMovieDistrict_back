@@ -24,9 +24,7 @@ namespace TheMovieDistrict.Service.impl
 
         public IEnumerable<ArticleDto>? GetArticles()
         {
-            IEnumerable<Article> result = _context.Articles
-                .OrderByDescending(a => a.DateTime)
-                .ToList();
+            IEnumerable<Article> result = _context.Articles.OrderByDescending(a => a.DateTime);
 
             if (result.Any())
             {

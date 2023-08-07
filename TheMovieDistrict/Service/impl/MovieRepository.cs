@@ -29,17 +29,61 @@ namespace TheMovieDistrict.Service.impl
             return null;
         }
 
-        public IEnumerable<Movie> GetMovies()
+        public IEnumerable<MovieDto>? GetMovies()
         {
-            return _context.Movies.Include(m => m.Locations).ToList();
+            var movies = _context.Movies.Include(m => m.Locations);
+
+            if (movies.Any())
+            {
+                ICollection<MovieDto> resultMapped = new List<MovieDto>();
+                foreach (Movie Movie in movies.ToList())
+                {
+                    resultMapped.Add(MovieDto.FromMovie(Movie));
+                }
+                return resultMapped;
+            }
+            return null;
+        }
+
+        public IEnumerable<MovieDto>? GetMoviesByCountry(string country)
+        {
+            var movies = _context.Movies.Where(m => m.Locations.Any(l => l.Address!.Country!.Equals(country)));
+
+            ICollection<MovieDto> resultMapped = new List<MovieDto>();
+
+            if (movies.Any())
+            {
+                foreach (Movie Movie in movies.ToList())
+                {
+                    resultMapped.Add(MovieDto.FromMovie(Movie));
+                }
+            }
+            return resultMapped;
+        }
+
+        public IEnumerable<MovieDto>? GetMoviesByCountryAndTerritory(string country, string territory)
+        {
+            var movies = _context.Movies.Where(m => m.Locations.Any(l => l.Address!.Country!.Equals(country)
+                                               && l.Address!.Territory!.Equals(territory)));
+
+            ICollection<MovieDto> resultMapped = new List<MovieDto>();
+
+            if (movies.Any())
+            {
+                foreach (Movie Movie in movies.ToList())
+                {
+                    resultMapped.Add(MovieDto.FromMovie(Movie));
+                }
+            }
+            return resultMapped;
         }
 
         public MovieDto? GetMovieById(int Id)
         {
             var movie = _context.Movies.Where(m => m.Id == Id)
-                                  .Include(m => m.Locations)
-                                  .ThenInclude(l => l.Address)
-                                  .FirstOrDefault();
+                                       .Include(m => m.Locations)
+                                       .ThenInclude(l => l.Address)
+                                       .FirstOrDefault();
 
             if (movie == null)
             {
@@ -71,5 +115,6 @@ namespace TheMovieDistrict.Service.impl
                                         .FirstOrDefault();
             return result != null;
         }
+
     }
 }

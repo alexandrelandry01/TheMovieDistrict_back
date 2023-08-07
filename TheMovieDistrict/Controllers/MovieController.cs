@@ -31,13 +31,37 @@ namespace TheMovieDistrict.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<MovieDto>> GetMovies()
         {
-            var movies =  _movieRepository.GetMovies();
+            var movies = _movieRepository.GetMovies();
 
             if (movies == null)
             {
                 return NotFound();
             }
 
+            return Ok(movies);
+        }
+
+        [HttpGet("findbycountry/{country}")]
+        public ActionResult<MovieDto> GetMoviesByCountry(string country)
+        {
+            var movies = _movieRepository.GetMoviesByCountry(country);
+
+            if (movies == null)
+            {
+                return NotFound();
+            }
+            return Ok(movies);
+        }
+
+        [HttpGet("findbycountry/{country}/{territory}")]
+        public ActionResult<MovieDto> GetMoviesByCountryAndTerritory(string country, string territory)
+        {
+            var movies = _movieRepository.GetMoviesByCountryAndTerritory(country, territory);
+
+            if (movies == null)
+            {
+                return NotFound();
+            }
             return Ok(movies);
         }
 

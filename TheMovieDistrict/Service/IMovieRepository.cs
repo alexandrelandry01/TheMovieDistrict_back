@@ -7,7 +7,9 @@ namespace TheMovieDistrict.Service
     public interface IMovieRepository
     {
         MovieDto? AddMovie([FromBody] MovieDto MovieDto);
-        IEnumerable<Movie> GetMovies();
+        IEnumerable<MovieDto>? GetMovies();
+        IEnumerable<MovieDto>? GetMoviesByCountry(string country);
+        IEnumerable<MovieDto>? GetMoviesByCountryAndTerritory(string country, string territory);
         MovieDto? GetMovieById(int Id);
         MovieDto? UpdateMovie([FromBody] MovieDto MovieDto);
         bool MovieAlreadyExists(Movie Movie);
