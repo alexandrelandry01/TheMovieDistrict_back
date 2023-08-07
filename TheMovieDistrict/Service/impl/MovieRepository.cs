@@ -31,18 +31,18 @@ namespace TheMovieDistrict.Service.impl
 
         public IEnumerable<MovieDto>? GetMovies()
         {
-            var movies = _context.Movies.Include(m => m.Locations);
+            var movies = _context.Movies.OrderBy(m => m.Title).Include(m => m.Locations);
+
+            ICollection<MovieDto> resultMapped = new List<MovieDto>();
 
             if (movies.Any())
             {
-                ICollection<MovieDto> resultMapped = new List<MovieDto>();
                 foreach (Movie Movie in movies.ToList())
                 {
                     resultMapped.Add(MovieDto.FromMovie(Movie));
                 }
-                return resultMapped;
             }
-            return null;
+            return resultMapped;
         }
 
         public IEnumerable<MovieDto>? GetMoviesByCountry(string country)
@@ -91,6 +91,22 @@ namespace TheMovieDistrict.Service.impl
             }
 
             return MovieDto.FromMovie(movie);
+        }
+
+        public IEnumerable<MovieDto>? GetLatestMovies()
+        {
+            var movies = _context.Movies.OrderByDescending(m => m.CreationDate).Take(5);
+
+            ICollection<MovieDto> resultMapped = new List<MovieDto>();
+
+            if (movies.Any())
+            {
+                foreach (Movie Movie in movies.ToList())
+                {
+                    resultMapped.Add(MovieDto.FromMovie(Movie));
+                }
+            }
+            return resultMapped;
         }
 
         public MovieDto? UpdateMovie([FromBody] MovieDto MovieDto)

@@ -74,6 +74,17 @@ namespace TheMovieDistrict.Controllers
             return Ok(movie);
         }
 
+        [HttpGet("latestmovies")]
+        public ActionResult<IEnumerable<MovieDto>> GetLatestMovies() {
+            var movies = _movieRepository.GetLatestMovies();
+
+            if (movies == null)
+            {
+                return NotFound();
+            }
+            return Ok(movies);
+        }
+
         [HttpPut("updatemovie/{id}")]
         public ActionResult<MovieDto> UpdateMovie([FromBody] MovieDto MovieDto)
         {
