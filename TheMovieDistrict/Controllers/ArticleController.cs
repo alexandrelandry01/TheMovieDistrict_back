@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TheMovieDistrict.Models;
 using TheMovieDistrict.Service;
 
@@ -10,14 +9,11 @@ namespace TheMovieDistrict.Controllers
     public class ArticleController : ControllerBase
     {
         private readonly IArticleRepository _articleRepository;
-        private readonly IMapper _mapper;
 
-        public ArticleController(IArticleRepository articleRepository, IMapper mapper)
+        public ArticleController(IArticleRepository articleRepository)
         {
             _articleRepository = articleRepository ??
                 throw new ArgumentNullException(nameof(articleRepository));
-            _mapper = mapper ??
-                throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpPost("addarticle")]

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TheMovieDistrict.Service;
-using AutoMapper;
 using TheMovieDistrict.Models;
 
 namespace TheMovieDistrict.Controllers
@@ -10,14 +9,11 @@ namespace TheMovieDistrict.Controllers
     public class MovieController : ControllerBase
     {
         private readonly IMovieRepository _movieRepository;
-        private readonly IMapper _mapper;
 
-        public MovieController(IMovieRepository movieRepository, IMapper mapper) 
+        public MovieController(IMovieRepository movieRepository) 
         {
             _movieRepository = movieRepository ?? 
                 throw new ArgumentNullException(nameof(movieRepository));
-            _mapper = mapper ??
-                throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpPost("addmovie")]
