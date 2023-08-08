@@ -10,6 +10,7 @@ namespace TheMovieDistrict.Models
         public Movie Movie { get; set; } = null!;
         public bool IsUnknown { get; set; }
         public bool IsFictional { get; set; }
+        public string? Note { get; set; }
 
         public static LocationDto FromLocation(Location Location)
         {
@@ -20,7 +21,8 @@ namespace TheMovieDistrict.Models
                 Address = Location.Address,
                 Movie = Location.Movie!,
                 IsUnknown = Location.IsUnknown,
-                IsFictional = Location.IsFictional
+                IsFictional = Location.IsFictional,
+                Note = Location.Note
             };
         }
     }

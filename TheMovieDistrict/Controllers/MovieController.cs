@@ -85,6 +85,18 @@ namespace TheMovieDistrict.Controllers
             return Ok(movies);
         }
 
+        [HttpGet("search/{searchParam}")]
+        public ActionResult<IEnumerable<MovieDto>> GetSearchResults(string searchParam)
+        {
+            var movies = _movieRepository.GetSearchResults(searchParam);
+
+            if (movies == null)
+            {
+                return NotFound();
+            }
+            return Ok(movies);
+        }
+
         [HttpPut("updatemovie/{id}")]
         public ActionResult<MovieDto> UpdateMovie([FromBody] MovieDto MovieDto)
         {

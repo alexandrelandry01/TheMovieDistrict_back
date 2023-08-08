@@ -109,6 +109,23 @@ namespace TheMovieDistrict.Service.impl
             return resultMapped;
         }
 
+        public IEnumerable<MovieDto>? GetSearchResults(string param)
+        {
+            var movies = _context.Movies.Where(m => m.Title.Contains(param)
+                                               || m.Locations.Any(l => l.Description.Contains(param)));
+
+            ICollection<MovieDto> resultMapped = new List<MovieDto>();
+
+            if (movies.Any())
+            {
+                foreach (Movie Movie in movies.ToList())
+                {
+                    resultMapped.Add(MovieDto.FromMovie(Movie));
+                }
+            }
+            return resultMapped;
+        }
+
         public MovieDto? UpdateMovie([FromBody] MovieDto MovieDto)
         {
             var movie = _context.Movies.Find(MovieDto.Id);
@@ -131,6 +148,5 @@ namespace TheMovieDistrict.Service.impl
                                         .FirstOrDefault();
             return result != null;
         }
-
     }
 }

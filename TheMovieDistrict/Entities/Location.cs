@@ -10,6 +10,7 @@ namespace TheMovieDistrict.Entities
         public Movie Movie { get; set; } = null!;
         public bool IsUnknown { get; set; }
         public bool IsFictional { get; set; }
+        public string? Note { get; set; }
         public static Location FromLocationDto(LocationDto LocationDto)
         {
             return new Location
@@ -19,7 +20,8 @@ namespace TheMovieDistrict.Entities
                 Address = LocationDto.Address,
                 Movie = LocationDto.Movie!,
                 IsUnknown = LocationDto.IsUnknown,
-                IsFictional = LocationDto.IsFictional
+                IsFictional = LocationDto.IsFictional,
+                Note = LocationDto.Note
             };
         }
     }

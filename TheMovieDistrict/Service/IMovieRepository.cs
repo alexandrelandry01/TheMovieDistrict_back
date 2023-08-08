@@ -12,6 +12,7 @@ namespace TheMovieDistrict.Service
         IEnumerable<MovieDto>? GetMoviesByCountryAndTerritory(string country, string territory);
         MovieDto? GetMovieById(int Id);
         IEnumerable<MovieDto>? GetLatestMovies();
+        IEnumerable<MovieDto>? GetSearchResults(string param);
         MovieDto? UpdateMovie([FromBody] MovieDto MovieDto);
         bool MovieAlreadyExists(Movie Movie);
     }
