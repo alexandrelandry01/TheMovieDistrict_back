@@ -17,17 +17,17 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpPost("addarticle")]
-        public ActionResult<ArticleDto> AddArticle([FromBody] ArticleDto ArticleDto)
+        public async Task<ActionResult<ArticleDto>> AddArticle([FromBody] ArticleDto ArticleDto)
         {
             ArticleDto.DateTime = DateTime.Now;
 
-            return Ok(_articleRepository.AddArticle(ArticleDto));
+            return Ok(await _articleRepository.AddArticle(ArticleDto)!);
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ArticleDto>> GetArticles()
+        public async Task<ActionResult<IEnumerable<ArticleDto>>> GetArticles()
         {
-            var articles = _articleRepository.GetArticles();
+            var articles = await _articleRepository.GetArticles()!;
 
             if (articles == null)
             {
@@ -37,9 +37,9 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ArticleDto> GetArticleById(int Id)
+        public async Task<ActionResult<ArticleDto>> GetArticleById(int Id)
         {
-            var article = _articleRepository.GetArticleById(Id);
+            var article = await _articleRepository.GetArticleById(Id)!;
 
             if (article == null)
             {
@@ -49,20 +49,26 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpPut("updatearticle/{id}")]
-        public ActionResult<ArticleDto> UpdateArticle([FromBody] ArticleDto ArticleDto)
+        public async Task<ActionResult<ArticleDto>> UpdateArticle([FromBody] ArticleDto ArticleDto)
         {
-            return Ok(_articleRepository.UpdateArticle(ArticleDto));
+            var article = await _articleRepository.UpdateArticle(ArticleDto)!;
+
+            if (article == null)
+            {
+                return NotFound();
+            }
+            return Ok(article);
         }
 
         [HttpDelete("deletearticle/{id}")]
-        public ActionResult DeleteArticle(int Id) {
-            bool articleDeleted = _articleRepository.DeleteArticle(Id);
+        public async Task<ActionResult<ArticleDto>> DeleteArticle(int Id) {
+            var articleDeleted = await _articleRepository.DeleteArticle(Id)!;
 
-            if (articleDeleted)
+            if (articleDeleted == null)
             {
-                return Ok(articleDeleted);
+                return NotFound();
             }
-            return BadRequest("Article was not found");
+            return Ok(articleDeleted);
         }
     }
 }

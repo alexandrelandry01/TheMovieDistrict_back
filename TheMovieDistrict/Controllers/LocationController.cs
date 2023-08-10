@@ -16,9 +16,9 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpPut("updatelocations/{id}")]
-        public ActionResult<IEnumerable<LocationDto>> UpdateLocations(int Id, [FromBody] ICollection<LocationDto> Locations)
+        public async Task<ActionResult<IEnumerable<LocationDto>>> UpdateLocations(int Id, [FromBody] ICollection<LocationDto> Locations)
         {
-            var locations = _locationRepository.UpdateLocations(Id, Locations);
+            var locations = await _locationRepository.UpdateLocations(Id, Locations)!;
 
             if (locations == null)
             {

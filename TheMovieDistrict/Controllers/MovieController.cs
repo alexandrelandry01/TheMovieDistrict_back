@@ -17,17 +17,17 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpPost("addmovie")]
-        public ActionResult<MovieDto> AddMovie([FromBody] MovieDto MovieDto)
+        public async Task<ActionResult<MovieDto>> AddMovie([FromBody] MovieDto MovieDto)
         {
             MovieDto.CreationDate = DateTime.Now;
 
-            return Ok(_movieRepository.AddMovie(MovieDto));
+            return Ok(await _movieRepository.AddMovie(MovieDto)!);
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<MovieDto>> GetMovies()
+        public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies()
         {
-            var movies = _movieRepository.GetMovies();
+            var movies = await _movieRepository.GetMovies()!;
 
             if (movies == null)
             {
@@ -38,9 +38,9 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpGet("findbycountry/{country}")]
-        public ActionResult<MovieDto> GetMoviesByCountry(string country)
+        public async Task<ActionResult<MovieDto>> GetMoviesByCountry(string country)
         {
-            var movies = _movieRepository.GetMoviesByCountry(country);
+            var movies = await _movieRepository.GetMoviesByCountry(country)!;
 
             if (movies == null)
             {
@@ -50,9 +50,9 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpGet("findbycountry/{country}/{territory}")]
-        public ActionResult<MovieDto> GetMoviesByCountryAndTerritory(string country, string territory)
+        public async Task<ActionResult<MovieDto>> GetMoviesByCountryAndTerritory(string country, string territory)
         {
-            var movies = _movieRepository.GetMoviesByCountryAndTerritory(country, territory);
+            var movies = await _movieRepository.GetMoviesByCountryAndTerritory(country, territory)!;
 
             if (movies == null)
             {
@@ -62,9 +62,9 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<MovieDto> GetMovieById(int Id)
+        public async Task<ActionResult<MovieDto>> GetMovieById(int Id)
         {
-            var movie = _movieRepository.GetMovieById(Id);
+            var movie = await _movieRepository.GetMovieById(Id)!;
             
             if (movie == null)
             {
@@ -75,8 +75,8 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpGet("latestmovies")]
-        public ActionResult<IEnumerable<MovieDto>> GetLatestMovies() {
-            var movies = _movieRepository.GetLatestMovies();
+        public async Task<ActionResult<IEnumerable<MovieDto>>> GetLatestMovies() {
+            var movies = await _movieRepository.GetLatestMovies()!;
 
             if (movies == null)
             {
@@ -86,9 +86,9 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpGet("search/{searchParam}")]
-        public ActionResult<IEnumerable<MovieDto>> GetSearchResults(string searchParam)
+        public async Task<ActionResult<IEnumerable<MovieDto>>> GetSearchResults(string searchParam)
         {
-            var movies = _movieRepository.GetSearchResults(searchParam);
+            var movies = await _movieRepository.GetSearchResults(searchParam)!;
 
             if (movies == null)
             {
@@ -98,9 +98,15 @@ namespace TheMovieDistrict.Controllers
         }
 
         [HttpPut("updatemovie/{id}")]
-        public ActionResult<MovieDto> UpdateMovie([FromBody] MovieDto MovieDto)
+        public async Task<ActionResult<MovieDto>> UpdateMovie([FromBody] MovieDto MovieDto)
         {
-            return Ok(_movieRepository.UpdateMovie(MovieDto));
+            var movie = await _movieRepository.UpdateMovie(MovieDto)!;
+
+            if (movie == null)
+            {
+                return NotFound();
+            }
+            return Ok(movie);
         } 
     }
 }

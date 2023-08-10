@@ -6,14 +6,14 @@ namespace TheMovieDistrict.Service
 {
     public interface IMovieRepository
     {
-        MovieDto? AddMovie([FromBody] MovieDto MovieDto);
-        IEnumerable<MovieDto>? GetMovies();
-        IEnumerable<MovieDto>? GetMoviesByCountry(string country);
-        IEnumerable<MovieDto>? GetMoviesByCountryAndTerritory(string country, string territory);
-        MovieDto? GetMovieById(int Id);
-        IEnumerable<MovieDto>? GetLatestMovies();
-        IEnumerable<MovieDto>? GetSearchResults(string param);
-        MovieDto? UpdateMovie([FromBody] MovieDto MovieDto);
-        bool MovieAlreadyExists(Movie Movie);
+        Task<MovieDto>? AddMovie([FromBody] MovieDto MovieDto);
+        Task<IEnumerable<MovieDto>>? GetMovies();
+        Task<IEnumerable<MovieDto>>? GetMoviesByCountry(string country);
+        Task<IEnumerable<MovieDto>>? GetMoviesByCountryAndTerritory(string country, string territory);
+        Task<MovieDto>? GetMovieById(int Id);
+        Task<IEnumerable<MovieDto>>? GetLatestMovies();
+        Task<IEnumerable<MovieDto>>? GetSearchResults(string param);
+        Task<MovieDto>? UpdateMovie([FromBody] MovieDto MovieDto);
+        Task<bool> MovieAlreadyExists(Movie Movie);
     }
 }

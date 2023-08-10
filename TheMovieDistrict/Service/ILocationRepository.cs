@@ -5,6 +5,6 @@ namespace TheMovieDistrict.Service
 {
     public interface ILocationRepository
     {
-        IEnumerable<LocationDto>? UpdateLocations(int Id, ICollection<LocationDto> Locations);
+        Task<IEnumerable<LocationDto>>? UpdateLocations(int Id, ICollection<LocationDto> Locations);
     }
 }

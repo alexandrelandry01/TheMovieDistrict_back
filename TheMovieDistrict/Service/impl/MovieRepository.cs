@@ -15,23 +15,23 @@ namespace TheMovieDistrict.Service.impl
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public MovieDto? AddMovie(MovieDto MovieDto)
+        public async Task<MovieDto>? AddMovie(MovieDto MovieDto)
         {
             Movie Movie = Movie.FromMovieDto(MovieDto);
 
-            if (!MovieAlreadyExists(Movie))
+            if (!(await MovieAlreadyExists(Movie))!)
             {
                 _context.Movies.Add(Movie);
-                var success = _context.SaveChanges() > 0;
+                var success = await _context.SaveChangesAsync() > 0;
 
-                return success ? MovieDto.FromMovie(Movie) : null;
+                return success ? MovieDto.FromMovie(Movie) : null!;
             }
-            return null;
+            return null!;
         }
 
-        public IEnumerable<MovieDto>? GetMovies()
+        public async Task<IEnumerable<MovieDto>>? GetMovies()
         {
-            var movies = _context.Movies.OrderBy(m => m.Title).Include(m => m.Locations);
+            var movies = await _context.Movies.OrderBy(m => m.Title).Include(m => m.Locations).ToListAsync();
 
             ICollection<MovieDto> resultMapped = new List<MovieDto>();
 
@@ -45,9 +45,9 @@ namespace TheMovieDistrict.Service.impl
             return resultMapped;
         }
 
-        public IEnumerable<MovieDto>? GetMoviesByCountry(string country)
+        public async Task<IEnumerable<MovieDto>>? GetMoviesByCountry(string country)
         {
-            var movies = _context.Movies.Where(m => m.Locations.Any(l => l.Address!.Country!.Equals(country)));
+            var movies = await _context.Movies.Where(m => m.Locations.Any(l => l.Address!.Country!.Equals(country))).ToListAsync();
 
             ICollection<MovieDto> resultMapped = new List<MovieDto>();
 
@@ -61,10 +61,10 @@ namespace TheMovieDistrict.Service.impl
             return resultMapped;
         }
 
-        public IEnumerable<MovieDto>? GetMoviesByCountryAndTerritory(string country, string territory)
+        public async Task<IEnumerable<MovieDto>>? GetMoviesByCountryAndTerritory(string country, string territory)
         {
-            var movies = _context.Movies.Where(m => m.Locations.Any(l => l.Address!.Country!.Equals(country)
-                                               && l.Address!.Territory!.Equals(territory)));
+            var movies = await _context.Movies.Where(m => m.Locations.Any(l => l.Address!.Country!.Equals(country)
+                                               && l.Address!.Territory!.Equals(territory))).ToListAsync();
 
             ICollection<MovieDto> resultMapped = new List<MovieDto>();
 
@@ -78,24 +78,24 @@ namespace TheMovieDistrict.Service.impl
             return resultMapped;
         }
 
-        public MovieDto? GetMovieById(int Id)
+        public async Task<MovieDto>? GetMovieById(int Id)
         {
-            var movie = _context.Movies.Where(m => m.Id == Id)
+            var movie = await _context.Movies.Where(m => m.Id == Id)
                                        .Include(m => m.Locations)
                                        .ThenInclude(l => l.Address)
-                                       .FirstOrDefault();
+                                       .FirstOrDefaultAsync();
 
             if (movie == null)
             {
-                return null;
+                return null!;
             }
 
             return MovieDto.FromMovie(movie);
         }
 
-        public IEnumerable<MovieDto>? GetLatestMovies()
+        public async Task<IEnumerable<MovieDto>>? GetLatestMovies()
         {
-            var movies = _context.Movies.OrderByDescending(m => m.CreationDate).Take(5);
+            var movies = await _context.Movies.OrderByDescending(m => m.CreationDate).Take(5).ToListAsync();
 
             ICollection<MovieDto> resultMapped = new List<MovieDto>();
 
@@ -109,10 +109,10 @@ namespace TheMovieDistrict.Service.impl
             return resultMapped;
         }
 
-        public IEnumerable<MovieDto>? GetSearchResults(string param)
+        public async Task<IEnumerable<MovieDto>>? GetSearchResults(string param)
         {
-            var movies = _context.Movies.Where(m => m.Title.Contains(param)
-                                               || m.Locations.Any(l => l.Description.Contains(param)));
+            var movies = await _context.Movies.Where(m => m.Title.Contains(param)
+                                               || m.Locations.Any(l => l.Description.Contains(param))).ToListAsync();
 
             ICollection<MovieDto> resultMapped = new List<MovieDto>();
 
@@ -126,26 +126,26 @@ namespace TheMovieDistrict.Service.impl
             return resultMapped;
         }
 
-        public MovieDto? UpdateMovie([FromBody] MovieDto MovieDto)
+        public async Task<MovieDto>? UpdateMovie([FromBody] MovieDto MovieDto)
         {
-            var movie = _context.Movies.Find(MovieDto.Id);
+            var movie = await _context.Movies.FindAsync(MovieDto.Id);
 
             if (movie != null)
             {
                 _context.Entry(movie).CurrentValues.SetValues(MovieDto);
             }
 
-            bool success = _context.SaveChanges() > 0;
+            bool success = await _context.SaveChangesAsync() > 0;
 
-            return success ? MovieDto : null;
+            return success ? MovieDto : null!;
         }
 
-        public bool MovieAlreadyExists(Movie Movie)
+        public async Task<bool> MovieAlreadyExists(Movie Movie)
         {
-            var result = _context.Movies.Where(m => m.Title == Movie.Title)
+            var result = await _context.Movies.Where(m => m.Title == Movie.Title)
                                         .Where(m => m.YearOfRelease == Movie.YearOfRelease)
                                         .Where(m => m.Director == Movie.Director)
-                                        .FirstOrDefault();
+                                        .FirstOrDefaultAsync();
             return result != null;
         }
     }

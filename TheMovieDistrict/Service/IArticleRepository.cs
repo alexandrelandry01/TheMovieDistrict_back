@@ -4,10 +4,10 @@ namespace TheMovieDistrict.Service
 {
     public interface IArticleRepository
     {
-        ArticleDto? AddArticle(ArticleDto ArticleDto);
-        IEnumerable<ArticleDto>? GetArticles();
-        ArticleDto? GetArticleById(int Id);
-        ArticleDto? UpdateArticle(ArticleDto ArticleDto);
-        bool DeleteArticle(int Id);
+        Task<ArticleDto>? AddArticle(ArticleDto ArticleDto);
+        Task<IEnumerable<ArticleDto>>? GetArticles();
+        Task<ArticleDto>? GetArticleById(int Id);
+        Task<ArticleDto>? UpdateArticle(ArticleDto ArticleDto);
+        Task<ArticleDto>? DeleteArticle(int Id);
     }
 }

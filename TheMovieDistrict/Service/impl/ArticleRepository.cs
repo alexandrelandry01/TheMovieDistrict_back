@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.EntityFrameworkCore;
 using TheMovieDistrict.Data;
 using TheMovieDistrict.Entities;
 using TheMovieDistrict.Models;
@@ -14,17 +14,17 @@ namespace TheMovieDistrict.Service.impl
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public ArticleDto? AddArticle(ArticleDto ArticleDto)            
+        public async Task<ArticleDto>? AddArticle(ArticleDto ArticleDto)            
         {
             _context.Articles.Add(Article.FromArticleDto(ArticleDto));
-            var success = _context.SaveChanges() > 0;
+            var success = await _context.SaveChangesAsync() > 0;
 
-            return success ? ArticleDto : null;
+            return success ? ArticleDto : null!;
         }
 
-        public IEnumerable<ArticleDto>? GetArticles()
+        public async Task<IEnumerable<ArticleDto>>? GetArticles()
         {
-            IEnumerable<Article> result = _context.Articles.OrderByDescending(a => a.DateTime);
+            var result = await _context.Articles.OrderByDescending(a => a.DateTime).ToListAsync();
 
             if (result.Any())
             {
@@ -35,46 +35,48 @@ namespace TheMovieDistrict.Service.impl
                 }
                 return resultMapped;
             }
-            return null;
+            return null!;
         }
 
-        public ArticleDto? GetArticleById(int Id)
+        public async Task<ArticleDto>? GetArticleById(int Id)
         {
-            var article = _context.Articles.Where(m => m.Id == Id).FirstOrDefault();
+            var article = await _context.Articles.Where(m => m.Id == Id).FirstOrDefaultAsync();
 
             if (article == null)
             {
-                return null;
+                return null!;
             } 
 
             return ArticleDto.FromArticle(article);
         }
 
-        public ArticleDto? UpdateArticle(ArticleDto ArticleDto)
+        public async Task<ArticleDto>? UpdateArticle(ArticleDto ArticleDto)
         {
-            var article = _context.Articles.Find(ArticleDto.Id);
+            var article = await _context.Articles.FindAsync(ArticleDto.Id);
 
             if (article != null)
             {
                 _context.Entry(article).CurrentValues.SetValues(ArticleDto);
             }
 
-            bool success = _context.SaveChanges() > 0;
+            bool success = await _context.SaveChangesAsync() > 0;
 
-            return success ? ArticleDto : null;
+            return success ? ArticleDto.FromArticle(article!) : null!;
         }
 
-        public bool DeleteArticle(int Id)
+        public async Task<ArticleDto>? DeleteArticle(int Id)
         {
-            var article = _context.Articles.Find(Id);
+            var article = await _context.Articles.FindAsync(Id);
 
             if (article == null)
             {
-                return false;
+                return null!;
             }
             _context.Articles.Remove(article);
-            
-            return _context.SaveChanges() > 0;
+
+            bool success = await _context.SaveChangesAsync() > 0;
+
+            return success ? ArticleDto.FromArticle(article) : null!;
         }
     }
 }

@@ -13,13 +13,13 @@ namespace TheMovieDistrict.Service.impl
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public IEnumerable<LocationDto>? UpdateLocations(int Id, ICollection<LocationDto> Locations)
+        public async Task<IEnumerable<LocationDto>>? UpdateLocations(int Id, ICollection<LocationDto> Locations)
         {
-            var movie = _context.Movies.Find(Id);
+            var movie = await _context.Movies.FindAsync(Id);
 
             if (movie == null)
             {
-                return null;
+                return null!;
             }
 
             var movieLocations = movie.Locations;
@@ -29,9 +29,9 @@ namespace TheMovieDistrict.Service.impl
                 movieLocations.Add(Location.FromLocationDto(movieLocation));
             }
 
-            _context.SaveChanges();
+            var success = await _context.SaveChangesAsync() > 0;
 
-            return Locations;
+            return success ? Locations : null!;
         }
 
         private ICollection<LocationDto> FromLocation(ICollection<Location> Locations)
