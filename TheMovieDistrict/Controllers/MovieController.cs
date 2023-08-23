@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TheMovieDistrict.Service;
 using TheMovieDistrict.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TheMovieDistrict.Controllers
 {
@@ -16,6 +17,7 @@ namespace TheMovieDistrict.Controllers
                 throw new ArgumentNullException(nameof(movieRepository));
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("addmovie")]
         public async Task<ActionResult<MovieDto>> AddMovie([FromBody] MovieDto MovieDto)
         {
@@ -97,6 +99,7 @@ namespace TheMovieDistrict.Controllers
             return Ok(movies);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("updatemovie/{id}")]
         public async Task<ActionResult<MovieDto>> UpdateMovie([FromBody] MovieDto MovieDto)
         {

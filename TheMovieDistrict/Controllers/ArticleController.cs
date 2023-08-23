@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TheMovieDistrict.Models;
 using TheMovieDistrict.Service;
 
@@ -16,6 +17,7 @@ namespace TheMovieDistrict.Controllers
                 throw new ArgumentNullException(nameof(articleRepository));
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("addarticle")]
         public async Task<ActionResult<ArticleDto>> AddArticle([FromBody] ArticleDto ArticleDto)
         {
@@ -48,6 +50,7 @@ namespace TheMovieDistrict.Controllers
             return Ok(article);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("updatearticle/{id}")]
         public async Task<ActionResult<ArticleDto>> UpdateArticle([FromBody] ArticleDto ArticleDto)
         {
@@ -60,6 +63,7 @@ namespace TheMovieDistrict.Controllers
             return Ok(article);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deletearticle/{id}")]
         public async Task<ActionResult<ArticleDto>> DeleteArticle(int Id) {
             var articleDeleted = await _articleRepository.DeleteArticle(Id)!;
