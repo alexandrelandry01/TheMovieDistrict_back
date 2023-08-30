@@ -95,7 +95,7 @@ namespace TheMovieDistrict.Service.impl
 
         public async Task<IEnumerable<MovieDto>>? GetLatestMovies()
         {
-            var movies = await _context.Movies.OrderByDescending(m => m.CreationDate).Take(5).ToListAsync();
+            var movies = await _context.Movies.Where(m => m.IsPublished).OrderByDescending(m => m.CreationDate).Take(5).ToListAsync();
 
             ICollection<MovieDto> resultMapped = new List<MovieDto>();
 

@@ -7,7 +7,7 @@
         public string? StreetName { get; set; }
         public string? Coordinates { get; set; }
         public string? City { get; set; } = null!;
-        public string? Territory  { get; set; } = null!;
+        public string? Territory  { get; set; }
         public string? Country { get; set; } = null!;
     }
 }
