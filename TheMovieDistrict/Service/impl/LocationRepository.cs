@@ -1,4 +1,5 @@
-﻿using TheMovieDistrict.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using TheMovieDistrict.Data;
 using TheMovieDistrict.Entities;
 using TheMovieDistrict.Models;
 
@@ -32,6 +33,17 @@ namespace TheMovieDistrict.Service.impl
             var success = await _context.SaveChangesAsync() > 0;
 
             return success ? Locations : null!;
+        }
+
+        public async Task<IEnumerable<string>> GetDistinctCountries()
+        {
+            return await _context.Locations.Where(l => l.Address!.Country != null).Select(l => l.Address!.Country!).Distinct().ToListAsync();
+        }
+
+        public async Task<IEnumerable<string>> GetDistinctTerritories(string CountryName)
+        {
+            return await _context.Locations.Where(l => l.Address!.Country != null && l.Address.Country.Equals(CountryName))
+                                                   .Select(l => l.Address!.Territory!).Distinct().ToListAsync();
         }
 
         private ICollection<LocationDto> FromLocation(ICollection<Location> Locations)

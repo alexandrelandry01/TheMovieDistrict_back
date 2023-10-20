@@ -28,5 +28,17 @@ namespace TheMovieDistrict.Controllers
             }
             return Ok(locations);
         }
+
+        [HttpGet("countries")]
+        public async Task<ActionResult<IEnumerable<string>>> GetDistinctCountries()
+        {
+            return Ok(await _locationRepository.GetDistinctCountries());
+        }
+
+        [HttpGet("{country}")]
+        public async Task<ActionResult<IEnumerable<string>>> GetDistinctCountries(string Country)
+        {
+            return Ok(await _locationRepository.GetDistinctTerritories(Country));
+        }
     }
 }

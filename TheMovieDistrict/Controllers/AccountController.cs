@@ -69,19 +69,31 @@ namespace TheMovieDistrict.Controllers
                 return Unauthorized("Invalid username");
             }
 
-            var result = await _userManager.CheckPasswordAsync(account, LoginDto.Password);
-
-            if (!result)
+            if (_userManager.SupportsUserLockout && await _userManager.IsLockedOutAsync(account))
             {
-                return Unauthorized("Invalid password"); 
+                return Forbid();
             }
 
-            return new UserDto
+            if (await _userManager.CheckPasswordAsync(account, LoginDto.Password))
             {
-                UserName = account.UserName,
-                Token = await _tokenService.CreateToken(account),
-                IsAdmin = await IsAdmin(account)
-            };
+                if (_userManager.SupportsUserLockout && await _userManager.GetAccessFailedCountAsync(account) > 0)
+                {
+                    await _userManager.ResetAccessFailedCountAsync(account);
+                }
+                return new UserDto
+                {
+                    UserName = account.UserName,
+                    Token = await _tokenService.CreateToken(account),
+                    IsAdmin = await IsAdmin(account)
+                };
+            } else
+            {
+                if (_userManager.SupportsUserLockout && await _userManager.GetLockoutEnabledAsync(account))
+                {
+                    await _userManager.AccessFailedAsync(account);
+                }
+                return Unauthorized("Invalid credentials");
+            }
         }
 
         private async Task<bool> UserAlreadyExists(string username)
